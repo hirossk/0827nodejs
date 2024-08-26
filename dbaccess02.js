@@ -17,7 +17,7 @@ app.get('/animal', (req, res) => {
     mysql.con.query('SELECT * from animal;', function (err, rows, fields) {
         if (err) { console.log('err: ' + err); }
         for (const line of rows){
-            ret_data.push({'name': line.name});
+            ret_data.push(line);
         };
         res.send(ret_data);
     });
