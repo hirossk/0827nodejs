@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sample</title>
+</head>
+
+<body>
+  <div>view area</div>
+  <div id="result"></div>
+  <input type="text" id="name" />
+  <button id="viewbutton">view</button>
+  <button id="insertbutton">insert</button>
+</body>
+
+</html>
+<script>
+  {
+    const viewbutton = document.getElementById('viewbutton');
+    const insertbutton = document.getElementById('insertbutton');
+    const nametext = document.getElementById('name');
+    const result = document.getElementById('result');
+
+    viewbutton.addEventListener('click', function () {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'http://localhost:3000/animal');
+      xhr.send();
+      //受信が成功した時に呼び出されるメソッドを定義する
+      xhr.onload = function () {
+        if (xhr.status == 200)
+          result.innerHTML = xhr.response;
+        else
+          result.innerHTML = "<h1>Requiest Failer</h1>";
+      };
+
+    });
+    insertbutton.addEventListener('click', function () {
+      const data = { name: nametext.value }; 
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'http://localhost:3000/animal');
+
+      // サーバに対して解析方法を指定する
+      xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+      // 入力データを送る
+      xhr.send(EncodeHTMLForm(data));
+      // xhr.send('ahoaho');
+      //受信が成功した時に呼び出されるメソッドを定義する
+      xhr.onload = function () {
+        if (xhr.status == 200)
+          result.innerHTML = xhr.response;
+        else
+          result.innerHTML = "<h1>Requiest Failer</h1>";
+      };
+
+    });
+
+    // HTMLフォームの形式にデータを変換する
+    function EncodeHTMLForm(data) {
+      var params = [];
+
+      for (var name in data) {
+        var value = data[name];
+        var param = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+
+        params.push(param);
+      }
+      return params.join('&').replace(/%20/g, '+');
+    }
+  }
+</script>

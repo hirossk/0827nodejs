@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Sample</title>
+</head>
+
+<body>
+  <div>view area</div>
+  <div id="result"></div>
+  <input type="text" id="name" />
+  <button id="viewbutton">view</button>
+  <button id="insertbutton">insert</button>
+</body>
+
+</html>
+<script>
+  {
+    const viewbutton = document.getElementById('viewbutton');
+    const insertbutton = document.getElementById('insertbutton');
+    const nametext = document.getElementById('name');
+    const result = document.getElementById('result');
+
+    function view(animalList) {
+      // コンテナの中身を全部消す
+      result.innerHTML = '';
+      // JSONの各要素に対して
+      for (const animal of animalList) {
+        const li = document.createElement('li');          // リスト要素
+        const label = document.createElement('label');    // ラベル
+        const text = new Text(animal.name);                // 項目名
+        // テキストを追加する
+        label.appendChild(text);
+        // リスト要素に先ほどのラベルを追加する
+        li.appendChild(label);
+        // resultリストにリスト要素を追加する
+        result.appendChild(li);
+      }
+    };
+    viewbutton.addEventListener('click', function () {
+      fetch('/animal')
+        .then((response) => response.json())
+        .then((animalList) => {
+          //viewの呼び出し
+          view(animalList);
+        }
+        )
+    });
+
+    insertbutton.addEventListener('click', function () {
+      const data = { name: nametext.value };
+      fetch('/animal', {
+        method: 'POST',
+        body: data
+      });
+      fetch('/animal')
+        .then((response) => response.json())
+        .then((animalList) => {
+          //viewの呼び出し
+          view(animalList);
+        }
+        )
+    });
+
+    // HTMLフォームの形式にデータを変換する
+    function EncodeHTMLForm(data) {
+      var params = [];
+
+      for (var name in data) {
+        var value = data[name];
+        var param = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+
+        params.push(param);
+      }
+      return params.join('&').replace(/%20/g, '+');
+    }
+  }
+</script>
