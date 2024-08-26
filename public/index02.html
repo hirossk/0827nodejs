@@ -48,10 +48,11 @@
     });
 
     insertbutton.addEventListener('click', function () {
+      console.log(nametext.value);
       const data = { name: nametext.value };
       fetch('/animal', {
         method: 'POST',
-        body: data
+        body: { name: nametext.value }
       });
       fetch('/animal')
         .then((response) => response.json())

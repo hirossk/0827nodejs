@@ -26,7 +26,6 @@ app.get('/animal', (req, res) => {
 app.post('/animal', (req, res) => {
     // 送られてきたデータはreq.body.キー名で取り出すことができる
     const name = req.body.name;
-    console.log(req);
 
     const query = "INSERT INTO animal (name) VALUES (?)";
     mysql.con.query(query, [name], (err, result) => {
