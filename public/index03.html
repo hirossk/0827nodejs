@@ -8,15 +8,19 @@
 <body>
   <div>view area</div>
   <div id="result"></div>
+  <input type="text" id="name" />
   <button id="viewbutton">view</button>
+  <button id="insertbutton">insert</button>
 </body>
 
 </html>
 <script>
   {
     const viewbutton = document.getElementById('viewbutton');
+    const insertbutton = document.getElementById('insertbutton');
+    const nametext = document.getElementById('name');
     const result = document.getElementById('result');
-    //表示用メソッドの用意
+
     function view(animalList) {
       // コンテナの中身を全部消す
       result.innerHTML = '';
@@ -42,5 +46,38 @@
         }
         )
     });
+
+    insertbutton.addEventListener('click', function () {
+      const data = { name: nametext.value };
+      // fetchを使ってポストデータを送信する
+      fetch('/animal', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams(data)
+      }
+      )
+      fetch('/animal')
+        .then((response) => response.json())
+        .then((animalList) => {
+          //viewの呼び出し
+          view(animalList);
+        }
+        )
+    });
+
+    // HTMLフォームの形式にデータを変換する
+    function EncodeHTMLForm(data) {
+      var params = [];
+
+      for (var name in data) {
+        var value = data[name];
+        var param = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+
+        params.push(param);
+      }
+      return params.join('&').replace(/%20/g, '+');
+    }
   }
 </script>

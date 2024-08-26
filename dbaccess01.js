@@ -23,21 +23,6 @@ app.get('/animal', (req, res) => {
     });
 });
 
-app.post('/animal', (req, res) => {
-    // 送られてきたデータはreq.body.キー名で取り出すことができる
-    const name = req.body.name;
-
-    const query = "INSERT INTO animal (name) VALUES (?)";
-    mysql.con.query(query, [name], (err, result) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send({ error: "データベースへの挿入に失敗しました" });
-        } else {
-            res.status(200).json({ message: "挿入されました" });
-        }
-    });
-});
-
 // 静的ファイルのルーティング
 // ルート「/」にアクセスしてきたら「public」以下を静的に参照する
 app.use(express.static('./public'));
